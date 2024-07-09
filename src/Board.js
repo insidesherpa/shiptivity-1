@@ -21,6 +21,55 @@ export default class Board extends React.Component {
       complete: React.createRef(),
     }
   }
+  componentDidMount(){
+    const containers = [
+      this.swimlanes.backlog.current,
+      this.swimlanes.inProgress.current,
+      this.swimlanes.complete.current
+    ];
+    Dragula(containers).on('drop',(el,target,source)=>{
+      const clientId = el.getAttribute('data-id');
+      const sourceLane = source.getAttribute('data-lane');
+      const targetLane = target.getAttribute('data-lane');
+      
+      console.log(`Card with ID ${clientId} dropped from ${sourceLane} to ${targetLane}`);
+
+      if(sourceLane !== targetLane){
+        this.updateClientStatus(clientId,targetLane)
+        this.updateCardColor(el, targetLane);
+      }
+    })
+  }
+  updateClientStatus(clientId, newStatus) {
+    console.log(`Updating client ${clientId} status to ${newStatus}`);
+
+    // Update state using functional setState to avoid state mutation issues
+    this.setState(prevState => {
+      // Ensure prevState.clients is initialized correctly
+      const { backlog, inProgress, complete } = prevState.clients;
+
+      const updatedClients = {
+        backlog: backlog.map(client => (client.id === clientId ? { ...client, status: newStatus } : client)),
+        inProgress: inProgress.map(client => (client.id === clientId ? { ...client, status: newStatus } : client)),
+        complete: complete.map(client => (client.id === clientId ? { ...client, status: newStatus } : client)),
+      };
+
+      return { clients: updatedClients };
+    });
+  }
+
+  updateCardColor(el, newStatus) {
+    console.log(`Updating card color for element with ID ${el.getAttribute('data-id')} to ${newStatus}`);
+    el.classList.remove('Card-grey', 'Card-blue', 'Card-green');
+
+    if (newStatus === 'backlog') {
+      el.classList.add('Card-grey');
+    } else if (newStatus === 'in-progress') {
+      el.classList.add('Card-blue');
+    } else if (newStatus === 'complete') {
+      el.classList.add('Card-green');
+    }
+  }
   getClients() {
     return [
       ['1','Stark, White and Abbott','Cloned Optimal Architecture', 'in-progress'],

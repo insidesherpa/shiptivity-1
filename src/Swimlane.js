@@ -15,10 +15,12 @@ export default class Swimlane extends React.Component {
         />
       );
     })
+    const laneName = this.props.name.toLowerCase().replace(/\s+/g, '-');
     return (
       <div className="Swimlane-column">
         <div className="Swimlane-title">{this.props.name}</div>
-        <div className="Swimlane-dragColumn" ref={this.props.dragulaRef}>
+        <div className="Swimlane-dragColumn" ref={this.props.dragulaRef} data-lane={laneName}>
+          {console.log(this.props.name)}
           {cards}
         </div>
       </div>);
