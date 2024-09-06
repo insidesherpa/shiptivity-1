@@ -1,54 +1,48 @@
-import React, { Component } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import HomeTab from './HomeTab';
-import Navigation from './Navigation';
-import Board from './Board';
-import './App.css';
+import React, {useState} from "react";
+import "bootstrap/dist/css/bootstrap.css";
+import HomeTab from "./HomeTab";
+import Navigation from "./Navigation";
+import Board from "./Board";
+import "./App.css";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedTab: 'home',
-    };
-  }
-  renderShippingRequests() {
-    return (<Board />);
-  }
+// we convert the class component to a functional component.
+// Converting class components to functional components involves replacing the state management and lifecycle methods with React hooks.
+function App() {
+  const [selectedTab, setSelectedTab] = useState("home");
 
-  renderNavigation() {
-    return (<Navigation
-      onClick={(tabName) => this.changeTab(tabName)}
-      selectedTab={this.state.selectedTab}
-      />);
-  }
+  const changeTab = (tabName) => {
+    setSelectedTab(tabName);
+  };
+  const renderShippingRequests = () => {
+    return <Board />;
+  };
 
-  renderTabContent() {
-    switch(this.state.selectedTab) {
-      case 'home':
-      default:
-        return HomeTab();
-      case 'shipping-requests':
-        return this.renderShippingRequests();
-    }
-  }
-  render() {
+  const renderNavigation = () => {
     return (
-      <div className="App">
-        {this.renderNavigation()}
-
-        <div className="App-body">
-          {this.renderTabContent()}
-        </div>
-      </div>
+      <Navigation
+        onClick={(tabName) => changeTab(tabName)}
+        selectedTab={selectedTab}
+      />
     );
-  }
+  };
 
-  changeTab(tabName) {
-    this.setState({
-      selectedTab: tabName,
-    });
-  }
+  const renderHomeTabContent = () => {
+    switch (selectedTab) {
+      case "home":
+      default:
+        return <HomeTab />;
+      case "shipping-requests":
+        return renderShippingRequests();
+    }
+  };
+  return (
+    <div className="App">
+      {renderNavigation()}
+      <div className="App-body">{renderHomeTabContent()}</div>
+    </div>
+  );
+  
 }
+
 
 export default App;
