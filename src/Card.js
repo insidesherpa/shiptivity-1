@@ -1,20 +1,22 @@
 import React from 'react';
 import './Card.css';
 
-export default class Card extends React.Component {
-  render() {
-    let className = ['Card'];
-    if (this.props.status === 'backlog') {
-      className.push('Card-grey');
-    } else if (this.props.status === 'in-progress') {
-      className.push('Card-blue');
-    } else if (this.props.status === 'complete') {
-      className.push('Card-green');
-    }
-    return (
-      <div className={className.join(' ')} data-id={this.props.id} data-status={this.props.status}>
-        <div className="Card-title">{this.props.name}</div>
-      </div>
-    );
+const Card = ({ id, status, name }) => {
+  let className = ['Card'];
+
+  if (status === 'backlog') {
+    className.push('Card-grey');
+  } else if (status === 'in-progress') {
+    className.push('Card-blue');
+  } else if (status === 'complete') {
+    className.push('Card-green');
   }
-}
+
+  return (
+    <div className={className.join(' ')} data-id={id} data-status={status}>
+      <div className="Card-title">{name}</div>
+    </div>
+  );
+};
+
+export default Card;
