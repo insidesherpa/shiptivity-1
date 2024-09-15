@@ -1,54 +1,49 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import HomeTab from './HomeTab';
 import Navigation from './Navigation';
 import Board from './Board';
 import './App.css';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedTab: 'home',
-    };
-  }
-  renderShippingRequests() {
-    return (<Board />);
-  }
+const App = () => {
+  const [selectedTab, setSelectedTab] = useState('home');
 
-  renderNavigation() {
-    return (<Navigation
-      onClick={(tabName) => this.changeTab(tabName)}
-      selectedTab={this.state.selectedTab}
-      />);
-  }
+  const renderShippingRequests = () => {
+    return <Board />;
+  };
 
-  renderTabContent() {
-    switch(this.state.selectedTab) {
+  const renderNavigation = () => {
+    return (
+      <Navigation
+        onClick={(tabName) => changeTab(tabName)}
+        selectedTab={selectedTab}
+      />
+    );
+  };
+
+  const renderTabContent = () => {
+    switch (selectedTab) {
       case 'home':
       default:
-        return HomeTab();
+        return <HomeTab />;
       case 'shipping-requests':
-        return this.renderShippingRequests();
+        return renderShippingRequests();
     }
-  }
-  render() {
-    return (
-      <div className="App">
-        {this.renderNavigation()}
+  };
 
-        <div className="App-body">
-          {this.renderTabContent()}
-        </div>
+  const changeTab = (tabName) => {
+    setSelectedTab(tabName);
+  };
+
+  return (
+    <div className="App">
+      {renderNavigation()}
+
+      <div className="App-body">
+        {renderTabContent()}
       </div>
-    );
-  }
-
-  changeTab(tabName) {
-    this.setState({
-      selectedTab: tabName,
-    });
-  }
-}
+    </div>
+  );
+};
 
 export default App;
