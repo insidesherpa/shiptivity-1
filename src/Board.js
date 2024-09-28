@@ -14,13 +14,56 @@ export default class Board extends React.Component {
         inProgress: clients.filter(client => client.status && client.status === 'in-progress'),
         complete: clients.filter(client => client.status && client.status === 'complete'),
       }
-    }
+    };
     this.swimlanes = {
       backlog: React.createRef(),
       inProgress: React.createRef(),
       complete: React.createRef(),
-    }
+    };
   }
+
+  componentDidMount() {
+    this.initDragula();
+  }
+
+  initDragula() {
+    // Initialize Dragula with the swimlane containers
+    const containers = [
+      this.swimlanes.backlog.current,
+      this.swimlanes.inProgress.current,
+      this.swimlanes.complete.current,
+    ];
+
+    const drake = Dragula(containers);
+
+    // Handle the drag and drop event
+    drake.on('drop', (el, target, source, sibling) => {
+      const clientId = el.getAttribute('data-id'); // Get the dragged card ID
+      const targetSwimlane = target.getAttribute('data-lane'); // Get target swimlane (backlog, in-progress, complete)
+
+      this.updateClientStatus(clientId, targetSwimlane);
+    });
+  }
+
+  updateClientStatus(clientId, newStatus) {
+    // Find the dragged client and update its status
+    const updatedClients = this.getClients().map(client => {
+      if (client.id === clientId) {
+        return { ...client, status: newStatus };
+      }
+      return client;
+    });
+
+    // Update the state based on the new statuses
+    this.setState({
+      clients: {
+        backlog: updatedClients.filter(client => !client.status || client.status === 'backlog'),
+        inProgress: updatedClients.filter(client => client.status && client.status === 'in-progress'),
+        complete: updatedClients.filter(client => client.status && client.status === 'complete'),
+      }
+    });
+  }
+
   getClients() {
     return [
       ['1','Stark, White and Abbott','Cloned Optimal Architecture', 'in-progress'],
@@ -50,9 +93,10 @@ export default class Board extends React.Component {
       status: companyDetails[3],
     }));
   }
+
   renderSwimlane(name, clients, ref) {
     return (
-      <Swimlane name={name} clients={clients} dragulaRef={ref}/>
+      <Swimlane name={name} clients={clients} dragulaRef={ref} />
     );
   }
 
