@@ -1,3 +1,83 @@
+
 .Board {
   margin-top: 12px;
+  background-color: #f4f7fb;
+  padding: 30px;
+  min-height: 100vh;
+  font-family: "Roboto", sans-serif;
+  overflow: hidden;
+}
+
+.Swimlane-column {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.Swimlane-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.Swimlane-dragColumn {
+  min-height: 300px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.Card {
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.Card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.Card-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.Card-description {
+  font-size: 14px;
+  color: #555;
+}
+
+.Card-grey {
+  background-color: #e0e0e0;
+}
+
+.Card-blue {
+  background-color: #64b5f6;
+}
+
+.Card-green {
+  background-color: #81c784;
+}
+
+.Card-grey:hover {
+  background-color: #b0bec5;
+}
+
+.Card-blue:hover {
+  background-color: #4fa3d1;
+}
+
+.Card-green:hover {
+  background-color: #66bb6a;
+}
+
+.Dragula-ghost {
+  opacity: 0.5;
 }
