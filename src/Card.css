@@ -3,6 +3,7 @@
   font-size: 12px;
   padding: 20px;
   margin-bottom: 10px;
+  cursor: grab;
 }
 
 .Card-grey {
@@ -20,6 +21,29 @@
   color: white;
 }
 
+.Card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
 .Card-title {
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.Card-description {
+  font-size: 14px;
+  color: #555;
+}
+
+.Card-grey:hover {
+  background-color: #b0bec5;
+}
+
+.Card-blue:hover {
+  background-color: #4fa3d1;
+}
+
+.Card-green:hover {
+  background-color: #66bb6a;
 }

@@ -1,3 +1,12 @@
 .Board {
   margin-top: 12px;
+  background-color: #f4f7fb;
+  padding: 30px;
+  min-height: 100vh;
+  font-family: "Roboto", sans-serif;
+  overflow: hidden;
+}
+
+.Dragula-ghost {
+  opacity: 0.5;
 }
