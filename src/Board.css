@@ -1,3 +1,48 @@
 .Board {
   margin-top: 12px;
 }
+
+.Swimlane-column {
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: #f4f4f4;
+  min-height: 300px;
+}
+
+.Swimlane-column h3 {
+  text-align: center;
+  font-size: 1.25rem;
+}
+
+.Swimlane-cards {
+  margin-top: 10px;
+}
+
+.Card {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: move;
+  transition: all 0.3s ease;
+}
+
+.Card-grey {
+  background-color: #f0f0f0;
+  border-left: 5px solid grey;
+}
+
+.Card-blue {
+  background-color: #e3f2fd;
+  border-left: 5px solid #1976d2;
+}
+
+.Card-green {
+  background-color: #c8e6c9;
+  border-left: 5px solid #388e3c;
+}
+
+.Swimlane-column h3 {
+  color: #333;
+}
