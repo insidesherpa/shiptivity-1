@@ -14,12 +14,54 @@ export default class Board extends React.Component {
         inProgress: clients.filter(client => client.status && client.status === 'in-progress'),
         complete: clients.filter(client => client.status && client.status === 'complete'),
       }
-    }
+    };
     this.swimlanes = {
       backlog: React.createRef(),
       inProgress: React.createRef(),
       complete: React.createRef(),
+    };
+  }
+
+  componentDidMount() {
+    const drake = Dragula([
+      this.swimlanes.backlog.current,
+      this.swimlanes.inProgress.current,
+      this.swimlanes.complete.current,
+    ]);
+
+    drake.on('drop', (el, target) => {
+      const status = target.parentElement.id;
+      el.setAttribute('data-status', status);
+
+      // Update card color based on the swimlane it is dropped into
+      if (status === 'backlog') {
+        el.classList.add('Card-grey');
+        el.classList.remove('Card-blue', 'Card-green');
+      } else if (status === 'in-progress') {
+        el.classList.add('Card-blue');
+        el.classList.remove('Card-grey', 'Card-green');
+      } else if (status === 'complete') {
+        el.classList.add('Card-green');
+        el.classList.remove('Card-grey', 'Card-blue');
+      }
+
+      // Update the state to reflect the new status
+      this.updateCardStatus(el.id, status);
+    });
+  }
+
+  updateCardStatus(id, status) {
+    const updatedClients = { ...this.state.clients };
+    const client = updatedClients.backlog.find(c => c.id === id) || 
+                   updatedClients.inProgress.find(c => c.id === id) ||
+                   updatedClients.complete.find(c => c.id === id);
+    if (client) {
+      client.status = status;
     }
+
+    this.setState({
+      clients: updatedClients,
+    });
   }
   getClients() {
     return [
@@ -52,7 +94,22 @@ export default class Board extends React.Component {
   }
   renderSwimlane(name, clients, ref) {
     return (
-      <Swimlane name={name} clients={clients} dragulaRef={ref}/>
+      <div className="Swimlane-column" ref={ref} id={name.toLowerCase()}>
+        <h3>{name}</h3>
+        <div className="Swimlane-cards">
+          {clients.map(client => (
+            <div 
+              key={client.id} 
+              className={`Card ${client.status === 'backlog' ? 'Card-grey' : client.status === 'in-progress' ? 'Card-blue' : 'Card-green'}`} 
+              id={client.id}
+              data-status={client.status}
+            >
+              <h4>{client.name}</h4>
+              <p>{client.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     );
   }
 
