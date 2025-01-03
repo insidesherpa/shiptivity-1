@@ -1,6 +1,6 @@
 {
   "short_name": "Shiptivitas",
-  "name": "Shiptivitas - Your Trusted Source for Tracking Activities",
+  "name": "Shiptivitas - Shipping Requests Management",
   "icons": [
     {
       "src": "icons/favicon-64x64.png",
@@ -27,6 +27,10 @@
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff",
-  "description": "Shiptivitas - Your trusted source for tracking and managing your daily activities with ease.",
-  "orientation": "portrait"
+  "description": "Shiptivitas - Manage and track your shipping requests with ease. Organize tasks through swimlanes for better workflow management.",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr"
 }
+
