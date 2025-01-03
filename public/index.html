@@ -2,35 +2,100 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" 
+    />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Shiptivitas - Your trusted source for tracking and managing your daily activities with ease." />
-    <meta name="author" content="Shiptivitas Team" />
     
-    <!-- Open Graph meta tags for better social media visibility -->
-    <meta property="og:title" content="Shiptivitas" />
-    <meta property="og:description" content="Shiptivitas - Your trusted source for tracking and managing your daily activities with ease." />
-    <meta property="og:image" content="%PUBLIC_URL%/images/og-image.png" />
-    <meta property="og:url" content="https://www.shiptivitas.com" />
-    <meta property="og:type" content="website" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Shiptivitas" />
-    <meta name="twitter:title" content="Shiptivitas" />
-    <meta name="twitter:description" content="Shiptivitas - Your trusted source for tracking and managing your daily activities with ease." />
-    <meta name="twitter:image" content="%PUBLIC_URL%/images/og-image.png" />
-
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Shiptivitas - Shipping Requests</title>
     
-    <!-- Preconnect to improve performance -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link rel="preconnect" href="https://www.google.com" />
+    <!-- Include Dragula CSS (for drag-and-drop functionality) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.css" />
     
-    <title>Shiptivitas</title>
+    <style>
+      /* Basic styling for the swimlanes */
+      .Swimlane-column {
+        width: 30%;
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        min-height: 400px;
+        float: left;
+      }
+
+      .Swimlane-column h3 {
+        text-align: center;
+      }
+
+      /* Styling for the cards */
+      .task-card {
+        margin: 10px;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #f0f0f0;
+        cursor: pointer;
+      }
+
+      /* Colors for different swimlanes */
+      .backlog { background-color: grey; color: white; }
+      .in-progress { background-color: blue; color: white; }
+      .complete { background-color: green; color: white; }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- Shipping Requests Tab - Swimlanes -->
+    <div id="shipping-requests">
+      <div id="backlog" class="Swimlane-column">
+        <h3>Backlog</h3>
+        <div class="task-card backlog">Task 1</div>
+        <div class="task-card backlog">Task 2</div>
+        <div class="task-card backlog">Task 3</div>
+      </div>
+
+      <div id="in-progress" class="Swimlane-column">
+        <h3>In Progress</h3>
+        <div class="task-card in-progress">Task 4</div>
+        <div class="task-card in-progress">Task 5</div>
+      </div>
+
+      <div id="complete" class="Swimlane-column">
+        <h3>Complete</h3>
+        <div class="task-card complete">Task 6</div>
+        <div class="task-card complete">Task 7</div>
+      </div>
+    </div>
+
     <div id="root"></div>
+
+    <!-- Include Dragula JS (for drag-and-drop functionality) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js"></script>
+    
+    <script>
+      // Initialize Dragula for the swimlanes
+      dragula([document.getElementById('backlog'), document.getElementById('in-progress'), document.getElementById('complete')])
+        .on('drag', function (el) {
+          // You can customize this function if needed when dragging starts
+        })
+        .on('drop', function (el, target, source, sibling) {
+          // When the card is dropped, update the swimlane color
+          if (target.id === 'backlog') {
+            el.classList.remove('in-progress', 'complete');
+            el.classList.add('backlog');
+          } else if (target.id === 'in-progress') {
+            el.classList.remove('backlog', 'complete');
+            el.classList.add('in-progress');
+          } else if (target.id === 'complete') {
+            el.classList.remove('backlog', 'in-progress');
+            el.classList.add('complete');
+          }
+        });
+    </script>
   </body>
 </html>
+
