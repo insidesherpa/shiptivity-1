@@ -1,0 +1,55 @@
+app.put('/api/v1/clients/:id', (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const { valid, messageObj } = validateId(id);
+  if (!valid) {
+    return res.status(400).send(messageObj);
+  }
+
+  const { status, priority } = req.body;
+
+  // Fetch the current client to ensure valid status and priority updates
+  const client = db.prepare('select * from clients where id = ?').get(id);
+  if (!client) {
+    return res.status(404).send({ message: 'Client not found' });
+  }
+
+  let updatedClient = { ...client };
+
+  // Handle status change (if provided)
+  if (status && status !== client.status) {
+    // Update status
+    updatedClient.status = status;
+
+    // Adjust priority for the new status (assign highest priority if this is the first card)
+    const maxPriorityInNewStatus = db.prepare('select max(priority) as maxPriority from clients where status = ?').get(status);
+    updatedClient.priority = maxPriorityInNewStatus ? maxPriorityInNewStatus.maxPriority + 1 : 1;
+
+    // Adjust priorities of other clients in the old swimlane
+    db.prepare('update clients set priority = priority - 1 where status = ? and priority >= ?').run(client.status, client.priority);
+  }
+
+  // Handle priority change (if provided)
+  if (priority && priority !== client.priority) {
+    updatedClient.priority = priority;
+
+    // Adjust the priorities of other clients in the same status to avoid priority duplication
+    // When moving to a higher priority (lower number), we need to shift the others down.
+    if (priority < client.priority) {
+      db.prepare('update clients set priority = priority + 1 where status = ? and priority >= ? and id != ?')
+        .run(client.status, priority, id);
+    }
+    // When moving to a lower priority (higher number), we need to shift the others up.
+    else if (priority > client.priority) {
+      db.prepare('update clients set priority = priority - 1 where status = ? and priority <= ? and id != ?')
+        .run(client.status, priority, id);
+    }
+  }
+
+  // Update the client with the new status and priority in the database
+  db.prepare('update clients set status = ?, priority = ? where id = ?')
+    .run(updatedClient.status, updatedClient.priority, id);
+
+  // Fetch all clients and return the updated list sorted by status and priority
+  const clients = db.prepare('select * from clients order by status, priority').all();
+  return res.status(200).send(clients);
+});

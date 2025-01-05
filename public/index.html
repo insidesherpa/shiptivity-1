@@ -5,37 +5,97 @@
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" 
     />
     <meta name="theme-color" content="#000000" />
-    <!--
-      manifest.json provides metadata used when your web app is added to the
-      homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
+    
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <title>Shiptivitas - Shipping Requests</title>
+    
+    <!-- Include Dragula CSS (for drag-and-drop functionality) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.css" />
+    
+    <style>
+      /* Basic styling for the swimlanes */
+      .Swimlane-column {
+        width: 30%;
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        min-height: 400px;
+        float: left;
+      }
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Shiptivitas</title>
+      .Swimlane-column h3 {
+        text-align: center;
+      }
+
+      /* Styling for the cards */
+      .task-card {
+        margin: 10px;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #f0f0f0;
+        cursor: pointer;
+      }
+
+      /* Colors for different swimlanes */
+      .backlog { background-color: grey; color: white; }
+      .in-progress { background-color: blue; color: white; }
+      .complete { background-color: green; color: white; }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- Shipping Requests Tab - Swimlanes -->
+    <div id="shipping-requests">
+      <div id="backlog" class="Swimlane-column">
+        <h3>Backlog</h3>
+        <div class="task-card backlog">Task 1</div>
+        <div class="task-card backlog">Task 2</div>
+        <div class="task-card backlog">Task 3</div>
+      </div>
+
+      <div id="in-progress" class="Swimlane-column">
+        <h3>In Progress</h3>
+        <div class="task-card in-progress">Task 4</div>
+        <div class="task-card in-progress">Task 5</div>
+      </div>
+
+      <div id="complete" class="Swimlane-column">
+        <h3>Complete</h3>
+        <div class="task-card complete">Task 6</div>
+        <div class="task-card complete">Task 7</div>
+      </div>
+    </div>
+
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <!-- Include Dragula JS (for drag-and-drop functionality) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js"></script>
+    
+    <script>
+      // Initialize Dragula for the swimlanes
+      dragula([document.getElementById('backlog'), document.getElementById('in-progress'), document.getElementById('complete')])
+        .on('drag', function (el) {
+          // You can customize this function if needed when dragging starts
+        })
+        .on('drop', function (el, target, source, sibling) {
+          // When the card is dropped, update the swimlane color
+          if (target.id === 'backlog') {
+            el.classList.remove('in-progress', 'complete');
+            el.classList.add('backlog');
+          } else if (target.id === 'in-progress') {
+            el.classList.remove('backlog', 'complete');
+            el.classList.add('in-progress');
+          } else if (target.id === 'complete') {
+            el.classList.remove('backlog', 'in-progress');
+            el.classList.add('complete');
+          }
+        });
+    </script>
   </body>
 </html>
+
